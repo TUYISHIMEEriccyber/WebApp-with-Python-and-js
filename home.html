@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styling with CSS</title>
+    <link href="arnoud.css" rel="stylesheet" type="text/css"/>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .button {
+            width: 100px;
+            height: 38px;
+            border-radius: 35px;
+            font-size: 25px;
+            font-family: sans-serif;
+            background-color: darkgrey;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: blueviolet;
+        }
+
+        .search {
+            width: 490px;
+            background-color: azure;
+            height: 38px;
+            border-radius: 35px;
+            font-size: 25px;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        li {
+            position: relative;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        li a:hover {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: coral;
+            min-width: 160px;
+            box-shadow: 0px 8px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: yellowgreen;
+        }
+
+        /* Show dropdown on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        #footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            font-size: 20px;
+            z-index: 1000;
+        }
+
+        #footer a {
+            color: darkcyan;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+
+        #footer a:hover {
+            text-decoration: underline;
+            font-weight: bolder;
+            font-size: 23px;
+            color: aquamarine;
+        }
+
+        #contents {
+            text-align: center;
+            background-color: white;
+            padding: 10px;
+            width: 95%;
+            margin-top: 100px; /* Adjusted margin for the fixed header */
+            margin-bottom: 60px; /* Adjusted for the fixed footer */
+        }
+
+        #contents p {
+            font-size: 28px;
+        }
+
+        li a img:hover {
+            background-color: #333;
+            width: 205px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <form action="form.php" method="post">
+        <ul class="eric">
+            <li class="dropdown"> <a class="dropbtn" href="#Home">Home</a>
+            <li class="dropdown"><a class="dropbtn" href="eric.html">Profile1</a>
+            </li>
+            <li class="dropdown"><a class="dropbtn" href="arnoud.html">Profile2</a>
+            </li>
+            <li class="dropdown"><a class="dropbtn" href="philemon.html">Profile3</a>
+            </li>
+            <input type="text" name="search" size="40" placeholder="Search for training type" class="search">
+            <input type="submit" class="button" name="search" value="Search">
+        </ul>
+    </form>
+</div>
+
+<div id="contents">
+    <p>Welcome to our portfolio page!!</p>
+    <img src="https://pbs.twimg.com/profile_images/904691154368778241/QJyreG0h_400x400.jpg" alt="portfolio" width="220px" style="left: 60%;">
+    <h3>Click on the image to get more info. We are all students at the <a href="https://www.ur.ac.rw">University of Rwanda</a>, CST-Nyarugenge, in year two of Computer Science-Economics.</h3><br>
+    <a href="eric.html"><img src="Eric photo.jpg" alt="Profile Picture" width="110" style="border-radius: 30px;">
+    </a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="arnoud.html"><img src="Philemon TUYISHIMIRE 220009467.jpg" alt="Profile Picture" width="110" style="border-radius: 30px;"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="philemon.html"><img src="Eric photo.jpg" alt="Profile Picture" width="110" style="border-radius: 30px;"></a>
+</div>
+
+<div id="footer">
+    <p>Click below to View:</p>
+    <a href="eric.html">Tuyishime Eric</a>
+    <a href="arnoud.html">Shema Arnoud</a>
+    <a href="philemon.html">Tuyishimire Philemon</a>
+    <a href="#">Back to top</a>
+</div>
+
+</body>
+</html>
