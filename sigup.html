@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup - Online TV</title>
+    <style>
+      /* CSS Styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #333;
+        background-image: url('tv-background-signup.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: #fff;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      header {
+        background-color: #444;
+        width: 100%;
+        padding: 10px 20px;
+        box-shadow: 0 2px 4px rgba(20, 20, 197, 0.8);
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideInDown 0.5s ease-in-out;
+      }
+
+      @keyframes slideInDown {
+        from {
+          transform: translateY(-100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      nav button {
+        background-color: rgb(9, 196, 202);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      nav button:hover {
+        background-color: #555;
+        transform: scale(1.05);
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 20px 20px;
+        width: 100%;
+        flex: 1;
+      }
+
+      .signup-container {
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 5px solid #444;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(221, 192, 30, 0.5);
+        animation: scaleIn 0.8s ease-in-out;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #09c4ca;
+        text-shadow: 1px 1px 5px #000;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color: #222;
+        color: white;
+        transition: border-color 0.3s;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: #888;
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color: #222;
+        color: white;
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(9, 196, 202);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #777;
+        transform: scale(1.05);
+      }
+
+      footer {
+        background-color: #444;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 4px rgba(20, 20, 197, 0.8);
+        color: #ddd;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 0.9em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Online TV - Signup</h1>
+      <nav>
+        <button onclick="goToHome()">Home</button>
+        <button onclick="goToAboutUs()">About</button>
+        <button id="messages-button" onclick="goToLogin()">Login</button>
+        <button onclick="goToView()">View</button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="signup-container">
+        <h2>Signup</h2>
+        <form id="signup-form" onsubmit="return signup(event)">
+          <input type="text" id="fullname" placeholder="Full Name" required />
+          <input type="email" id="email" placeholder="Email" required />
+          <input type="password" id="password" placeholder="Password" required />
+          <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+          
+          <!-- Role selection -->
+          <select id="role" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <p class="error-message" id="error-message"></p>
+          <button type="submit">Signup</button>
+        </form>
+        <p id="success-message" style="color: green; text-align: center"></p>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+      function goToHome() {
+        window.location.href = "index.html";
+      }
+
+      function goToAboutUs() {
+        window.location.href = "aboutus.html";
+      }
+
+      function goToLogin() {
+        window.location.href = "login.html";
+      }
+
+      function goToView() {
+        window.location.href = "view.html";
+      }
+
+      // Password hashing function
+      async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        return hashHex;
+      }
+
+      // Email validation function
+      function validateEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+      }
+
+      // Password validation function
+      function validatePassword(password) {
+        const minLength = 8;
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+        return (
+          password.length >= minLength &&
+          hasUppercase &&
+          hasLowercase &&
+          hasNumber &&
+          hasSpecialChar
+        );
+      }
+
+      async function signup(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        const fullname = document.getElementById("fullname").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+        const role = document.getElementById("role").value; // Get role selection
+        const errorMessage = document.getElementById("error-message");
+
+        errorMessage.textContent = ""; // Clear any previous errors
+
+        // Validate email
+        if (!validateEmail(email)) {
+          errorMessage.textContent = "Please enter a valid email address.";
+          return;
+        }
+
+        // Validate the password
+        if (!validatePassword(password)) {
+          errorMessage.textContent =
+            "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+          return;
+        }
+
+        // Confirm passwords match
+        if (password !== confirmPassword) {
+          errorMessage.textContent = "Passwords do not match.";
+          return;
+        }
+
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Get the existing users from localStorage
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Check if the email already exists in localStorage
+        const existingUser = users.find((user) => user.email === email);
+
+        if (existingUser) {
+          errorMessage.textContent = "An account with this email already exists.";
+          return;
+        }
+
+        // Save the user data (including plaintext password for demonstration purposes)
+        const newUser = {
+          fullname: fullname,
+          email: email,
+          password: hashedPassword,
+          plaintextPassword: password, // Store plaintext password temporarily (demo purposes)
+          registrationTime: new Date().toISOString(), // Add registration time
+          role: role, // Store the selected role
+        };
+
+        // Add the new user to the list of users
+        users.push(newUser);
+
+        // Store the updated users array back in localStorage
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // Show success message
+        document.getElementById("success-message").textContent =
+          "Signup successful! You can now login.";
+      }
+
+      // Function to update users' data (check for missing plaintext passwords and registration dates)
+      function updateUserData() {
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        users = users.map((user) => {
+          if (!user.plaintextPassword || !user.registrationTime) {
+            const newPassword = prompt(
+              `Hi ${user.fullname}, please enter a new password to update your profile:`
+            );
+
+            if (newPassword) {
+              user.plaintextPassword = newPassword;
+              user.password = hashPassword(newPassword); // Hash the new password
+
+              if (!user.registrationTime) {
+                user.registrationTime = new Date().toISOString();
+              }
+            }
+          }
+          return user;
+        });
+
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // alert("All user data has been updated with plaintext passwords and registration times.");
+      }
+
+      // Call updateUserData on page load
+      window.onload = function () {
+        updateUserData();
+      };
+    </script>
+  </body>
+</html>

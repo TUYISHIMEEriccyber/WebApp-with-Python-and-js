@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Online TV</title>
+    <style>
+        /* CSS Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #1e1e1e; /* Darker background for contrast */
+            color: #fff;
+            transition: background-color 0.3s; /* Smooth transition for background color */
+        }
+
+        header {
+            background-color: #2c2c2c; /* Slightly darker for the header */
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav button {
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: bold; /* Make text bold */
+            cursor: pointer; /* Make it clickable */
+            background-color: rgb(9, 196, 202);
+            border: none; /* Remove default border */
+        }
+
+        nav button:hover {
+            background-color: #555;
+        }
+
+        #logout-button {
+            background-color: #dd4747; /* Logout button color */
+        }
+
+        #logout-button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 20px;
+            width: 100%;
+            flex: 1;
+            text-align: center; /* Center text */
+        }
+
+        h2 {
+            margin-bottom: 20px; /* Space between title and content */
+            font-size: 28px; /* Increase font size for visibility */
+        }
+
+        #user-info {
+            background-color: #2c2c2c; /* Background for user info */
+            border: 1px solid #555; /* Border for user info */
+            border-radius: 8px; /* Rounded corners */
+            padding: 15px;
+            max-width: 400px; /* Limit max width for better layout */
+            width: 100%; /* Full width up to max-width */
+            font-size: 18px; /* Increase font size */
+        }
+
+        #suggestion-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #suggestion-input {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #444; /* Darker background for input */
+            color: #fff; /* Text color */
+        }
+
+        #submit-suggestion {
+            background-color: rgb(9, 196, 202);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submit-suggestion:hover {
+            background-color: #555;
+        }
+
+        .suggestion-container, .announcement-container {
+            margin-top: 20px;
+            max-width: 400px;
+            width: 100%;
+            background-color: #2c2c2c; /* Background for suggestions */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px;
+            text-align: left;
+            display: none; /* Hide initially */
+        }
+
+        .suggestion, .announcement {
+            background-color: #444; /* Darker background for each suggestion/announcement */
+            border: 1px solid #555; /* Border for each suggestion/announcement */
+            border-radius: 5px;
+            margin: 5px 0;
+            padding: 10px;
+        }
+
+        footer {
+            background-color: #2c2c2c;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            position: relative; /* Ensure footer stays at bottom */
+            bottom: 0; /* Align to bottom */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        footer p {
+            font-size: 14px; /* Font size for footer */
+            color: #ccc; /* Lighter color for footer text */
+        }
+
+        .reply-button, .like-button {
+            background-color: rgb(9, 196, 202);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .reply-button:hover, .like-button:hover {
+            background-color: #555;
+        }
+
+        .delete-button {
+            background-color: #dd4747; /* Red color for delete button */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .delete-button:hover {
+            background-color: #c74040;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Online TV - Profile</h1>
+        <nav>
+            <button onclick="goToHome()">Home</button>
+            <button onclick="goToAboutUs()">About Us</button>
+            <button id="messages-button" onclick="goToMessages()">Messages</button>
+            <button onclick="toggleAnnouncements()">Announcements</button> <!-- New Announcements button -->
+            <button onclick="goToView()">View</button>
+            <button id="logout-button" onclick="logout()">Logout</button>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Welcome to Your Profile</h2>
+        <p id="user-info"></p>
+
+        <div id="suggestion-form">
+            <textarea id="suggestion-input" placeholder="Enter your suggestion..." rows="4"></textarea>
+            <button id="submit-suggestion" onclick="submitSuggestion()">Submit Suggestion</button>
+        </div>
+
+        <div class="suggestion-container" id="suggestion-list">
+            <h3>Your Suggestions & Replies</h3>
+            <!-- Suggestions and replies will be displayed here -->
+        </div>
+
+        <div class="announcement-container" id="announcement-list">
+            <h3>Announcements</h3>
+            <!-- Announcements will be displayed here -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check login status and display user info
+        function checkLoginStatus() {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const user = users.find((user) => user.email === currentUserEmail);
+
+            if (user) {
+                document.getElementById("user-info").textContent = `Hello, ${user.fullname}!`;
+                document.getElementById("logout-button").style.display = "inline-block"; // Show logout button
+                displaySuggestions(); // Display suggestions when user logs in
+            } else {
+                window.location.href = "login.html"; // Redirect if user not found
+            }
+        }
+
+        // Navigation functions
+        function goToHome() {
+            window.location.href = "index.html";
+        }
+
+        function goToAboutUs() {
+            window.location.href = "aboutus.html";
+        }
+
+        function goToMessages() {
+            window.location.href = "messages.html";
+        }
+
+        function goToView() {
+            window.location.href = "view.html";
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem("currentUserEmail"); // Remove the current user's email
+            document.getElementById("logout-button").style.display = "none"; // Hide logout button
+            window.location.href = "login.html"; // Redirect to login page
+        }
+
+        // Submit suggestion function
+        function submitSuggestion() {
+            const suggestionInput = document.getElementById("suggestion-input");
+            const suggestionText = suggestionInput.value.trim();
+            if (!suggestionText) {
+                alert("Please enter a suggestion.");
+                return;
+            }
+
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const user = users.find((user) => user.email === currentUserEmail);
+
+            const suggestions = JSON.parse(localStorage.getItem(`suggestions_${currentUserEmail}`)) || [];
+            const newSuggestion = {
+                text: suggestionText,
+                date: new Date().toISOString(),
+                user: user.fullname,
+                replies: [],
+            };
+
+            suggestions.push(newSuggestion);
+            localStorage.setItem(`suggestions_${currentUserEmail}`, JSON.stringify(suggestions));
+            suggestionInput.value = ""; // Clear the input field
+            displaySuggestions(); // Refresh the displayed suggestions
+        }
+
+        // Function to display suggestions
+        function displaySuggestions() {
+            const suggestionList = document.getElementById("suggestion-list");
+            suggestionList.innerHTML = ""; // Clear existing suggestions
+
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const suggestions = JSON.parse(localStorage.getItem(`suggestions_${currentUserEmail}`)) || [];
+
+            suggestions.forEach((suggestion, index) => {
+                const suggestionDiv = document.createElement("div");
+                suggestionDiv.className = "suggestion";
+                suggestionDiv.innerHTML = `
+                    <strong>Suggestion:</strong> ${suggestion.text}<br>
+                    <strong>Date:</strong> ${new Date(suggestion.date).toLocaleString()}<br>
+                    <strong>User:</strong> ${suggestion.user}<br>
+                    <button class="reply-button" onclick="replyToSuggestion(${index})">Reply</button>
+                    <button class="delete-button" onclick="deleteSuggestion(${index})">Delete</button>
+                `;
+                suggestionList.appendChild(suggestionDiv);
+            });
+        }
+
+        // Function to reply to a suggestion
+        function replyToSuggestion(index) {
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const suggestions = JSON.parse(localStorage.getItem(`suggestions_${currentUserEmail}`)) || [];
+            const replyText = prompt("Enter your reply:");
+
+            if (replyText) {
+                const reply = {
+                    text: replyText,
+                    date: new Date().toISOString(),
+                    user: "Admin", // You can change this to the admin's name
+                };
+
+                suggestions[index].replies.push(reply);
+                localStorage.setItem(`suggestions_${currentUserEmail}`, JSON.stringify(suggestions));
+                displaySuggestions(); // Refresh suggestions
+            }
+        }
+
+        // Function to delete a suggestion
+        function deleteSuggestion(index) {
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const suggestions = JSON.parse(localStorage.getItem(`suggestions_${currentUserEmail}`)) || [];
+            suggestions.splice(index, 1); // Remove the suggestion
+            localStorage.setItem(`suggestions_${currentUserEmail}`, JSON.stringify(suggestions));
+            displaySuggestions(); // Refresh suggestions
+        }
+
+        // Function to display announcements
+        function displayAnnouncements() {
+            const announcementsList = document.getElementById("announcement-list");
+            announcementsList.innerHTML = ""; // Clear existing announcements
+
+            const announcements = JSON.parse(localStorage.getItem("announcements")) || []; // Get announcements from local storage
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+
+            const likedAnnouncements = JSON.parse(localStorage.getItem(`liked_announcements_${currentUserEmail}`)) || []; // Retrieve liked announcements for the current user
+
+            announcements.forEach((announcement, index) => {
+                const isLiked = likedAnnouncements.includes(index); // Check if the announcement is liked by the user
+                const announcementDiv = document.createElement("div");
+                announcementDiv.className = "announcement";
+                announcementDiv.innerHTML = `
+                    <strong>Announcement:</strong> ${announcement.text}<br>
+                    <strong>Date:</strong> ${new Date(announcement.date).toLocaleString()}<br>
+                    <strong>Likes:</strong> <span id="like-count-${index}">${announcement.likes || 0}</span>
+                    <button class="like-button" onclick="toggleLikeAnnouncement(${index})">${isLiked ? 'Unlike' : 'Like'}</button>
+                `;
+                announcementsList.appendChild(announcementDiv);
+            });
+        }
+
+        // Function to toggle like/unlike an announcement
+        function toggleLikeAnnouncement(index) {
+            const announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const likedAnnouncements = JSON.parse(localStorage.getItem(`liked_announcements_${currentUserEmail}`)) || []; // Retrieve liked announcements
+
+            if (!announcements[index]) return; // Ensure announcement exists
+
+            if (likedAnnouncements.includes(index)) {
+                // If already liked, unlike it
+                likedAnnouncements.splice(likedAnnouncements.indexOf(index), 1); // Remove from liked list
+                announcements[index].likes = announcements[index].likes > 0 ? announcements[index].likes - 1 : 0; // Decrement like count
+            } else {
+                // If not liked, like it
+                likedAnnouncements.push(index); // Add to liked list
+                announcements[index].likes = (announcements[index].likes || 0) + 1; // Increment like count
+            }
+
+            localStorage.setItem("announcements", JSON.stringify(announcements)); // Save announcements back to local storage
+            localStorage.setItem(`liked_announcements_${currentUserEmail}`, JSON.stringify(likedAnnouncements)); // Save liked announcements
+
+            // Update the like count display
+            document.getElementById(`like-count-${index}`).textContent = announcements[index].likes;
+            // Update button text to reflect current status
+            const likeButton = document.querySelector(`.like-button[onclick="toggleLikeAnnouncement(${index})"]`);
+            likeButton.textContent = likedAnnouncements.includes(index) ? 'Unlike' : 'Like';
+        }
+
+        // Function to toggle the announcements display
+        function toggleAnnouncements() {
+            const announcementContainer = document.getElementById("announcement-list");
+            announcementContainer.style.display = announcementContainer.style.display === "none" || announcementContainer.style.display === "" ? "block" : "none";
+            displayAnnouncements(); // Ensure announcements are displayed when opened
+        }
+
+        // Call the function on page load
+        document.addEventListener("DOMContentLoaded", checkLoginStatus);
+    </script>
+</body>
+</html>

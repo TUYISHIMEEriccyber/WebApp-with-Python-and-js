@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages - Online TV</title>
+    <style>
+        /* CSS Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #333;
+            color: #fff;
+        }
+
+        header {
+            background-color: #444;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(20, 20, 197, 0.8);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: rgb(34, 100, 224); /* Same as send button */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        nav button:hover {
+            background-color: #555; /* Adjusted hover color */
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .messages-container {
+            background-color: black;
+            border: 5px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(233, 46, 139, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .message-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .message-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .message-links a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            background-color: #222;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            color: white;
+            position: relative;
+        }
+
+        .new-message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+
+        input[type="text"]:focus {
+            border-color: #888;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgb(34, 100, 224);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #620bd4; /* Adjusted hover color */
+        }
+
+        .active-link {
+            font-weight: bold;
+            background-color: rgb(34, 100, 224); /* Bright color for active link */
+            color: white;
+            border: 2px solid rgb(255, 223, 0); /* Gold border to enhance visibility */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow effect for depth */
+            transform: scale(1.05); /* Slightly larger for emphasis */
+        }
+
+        /* Styles for the message links */
+        .message-links a.inbox {
+            background-color: rgb(34, 100, 224); /* Inbox button color */
+        }
+
+        .message-links a.sent {
+            background-color: rgb(34, 224, 100); /* Sent button color */
+        }
+
+        .message-links a.outbox {
+            background-color: rgb(224, 100, 34); /* Outbox button color */
+        }
+
+        footer {
+            background-color: #444;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 4px rgba(20, 20, 197, 0.8);
+        }
+
+        .notification {
+            color: rgb(34, 100, 224);
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Style for the button to return back to the default UI */
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgb(9, 196, 202);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #620bd4; /* Adjusted hover color */
+        }
+
+        /* Improved styles for delete and resend buttons */
+        .delete-button, .resend-button {
+            position: absolute;
+            right: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-button {
+            background-color: red;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+
+        .resend-button {
+            background-color: orange;
+            right: 80px; /* Adjust position of resend button */
+        }
+
+        .resend-button:hover {
+            background-color: darkorange;
+        }
+
+        /* Default UI styles */
+        .home {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 40px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Online TV - Messages</h1>
+        <nav>
+            <button onclick="window.location.href='index.html'">Home</button>
+            <button onclick="window.location.href='aboutus.html'">About Us</button>
+            <button onclick="window.location.href='view.html'">View</button>
+            <button onclick="window.location.href='profile.html'">Profile</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="messages-container">
+            <h2>Your Messages</h2>
+
+            <!-- Message Links -->
+            <div class="message-links">
+                <button class="back-button" onclick="showHome()">Back to Home</button>
+                <a href="#" id="inboxLink" class="inbox" onclick="showInbox()">Inbox</a> 
+                <a href="#" id="sentLink" class="sent" onclick="showSent()">Sent</a> 
+                <a href="#" id="outboxLink" class="outbox" onclick="showOutbox()">Outbox</a> 
+            </div>
+
+            <!-- New Message Form -->
+            <div class="new-message">
+                <input
+                    type="text"
+                    id="receiverName"
+                    placeholder="Receiver's Name"
+                    required
+                />
+                <input
+                    type="text"
+                    id="newMessage"
+                    placeholder="Write your message here..."
+                    required
+                />
+                <button id="sendButton">Send</button>
+            </div>
+
+            <!-- Notification -->
+            <div id="notification" class="notification"></div>
+
+            <!-- Message List -->
+            <div id="messageList">
+                <div class="home" id="defaultUI"></div>
+            </div>
+
+            <!-- Back to Home Button -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const inboxMessages = [];
+        const sentMessages = [];
+        const outboxMessages = [];
+
+        // Check if user is logged in, redirect to login page if not
+        function checkLoginStatus() {
+            const currentUser = localStorage.getItem("currentUserEmail");
+            if (!currentUser) {
+                window.location.href = "login.html"; // Redirect to login page
+            }
+        }
+
+        // Event Listener for sending messages
+        document.addEventListener("DOMContentLoaded", function () {
+            const sendButton = document.getElementById("sendButton");
+            sendButton.addEventListener("click", function () {
+                const receiverInput = document.getElementById("receiverName");
+                const messageInput = document.getElementById("newMessage");
+
+                const receiverName = receiverInput.value.trim();
+                const message = messageInput.value.trim();
+
+                if (receiverName === "" || message === "") {
+                    alert("Please enter both receiver's name and your message.");
+                } else {
+                    const timestamp = new Date().toLocaleString();
+
+                    // Add message to sent messages
+                    sentMessages.push({ to: receiverName, text: message, time: timestamp });
+                    console.log("Sent Messages: ", sentMessages);
+
+                    // Add message to outbox
+                    outboxMessages.push({ from: "You", to: receiverName, text: message, time: timestamp });
+                    console.log("Outbox Messages: ", outboxMessages);
+
+                    // Show message as delivered in inbox (mocking delivery acknowledgment)
+                    inboxMessages.push({ from: receiverName, text: message, time: timestamp });
+                    console.log("Inbox Messages: ", inboxMessages);
+
+                    // Clear inputs
+                    receiverInput.value = '';
+                    messageInput.value = '';
+
+                    // Show notification
+                    const notification = document.getElementById("notification");
+                    notification.textContent = `Message sent to ${receiverName} at ${timestamp}.`;
+                    notification.style.display = "block";
+
+                    // Hide notification after 1 second
+                    setTimeout(() => {
+                        notification.style.display = "none";
+                    }, 1000);
+                }
+            });
+        });
+
+        // Show Inbox
+        function showInbox() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = "";
+            const notification = document.getElementById("notification");
+            notification.style.display = "none"; // Hide notification
+
+            if (inboxMessages.length === 0) {
+                messageList.innerHTML = "<p>No messages in Inbox.</p>";
+            } else {
+                inboxMessages.forEach((msg, index) => {
+                    messageList.innerHTML += `
+                        <div class="message">
+                            <strong>From: ${msg.from}</strong>: ${msg.text} <br />
+                            <small>${msg.time}</small>
+                            <button class="delete-button" onclick="deleteMessage('inbox', ${index})">Delete</button>
+                        </div>`;
+                });
+            }
+
+            // Update active link styles
+            updateActiveLink('inbox');
+        }
+
+        // Show Sent Messages
+        function showSent() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = "";
+            const notification = document.getElementById("notification");
+            notification.style.display = "none"; // Hide notification
+
+            if (sentMessages.length === 0) {
+                messageList.innerHTML = "<p>No messages in Sent.</p>";
+            } else {
+                sentMessages.forEach((msg, index) => {
+                    messageList.innerHTML += `
+                        <div class="message">
+                            <strong>To: ${msg.to}</strong>: ${msg.text} <br />
+                            <small>${msg.time}</small>
+                            <button class="delete-button" onclick="deleteMessage('sent', ${index})">Delete</button>
+                        </div>`;
+                });
+            }
+
+            // Update active link styles
+            updateActiveLink('sent');
+        }
+
+        // Show Outbox Messages
+        function showOutbox() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = "";
+            const notification = document.getElementById("notification");
+            notification.style.display = "none"; // Hide notification
+
+            if (outboxMessages.length === 0) {
+                messageList.innerHTML = "<p>No messages in Outbox.</p>";
+            } else {
+                outboxMessages.forEach((msg, index) => {
+                    messageList.innerHTML += `
+                        <div class="message">
+                            <strong>From: ${msg.from}</strong>: ${msg.text} <br />
+                            <small>${msg.time}</small>
+                            <button class="delete-button" onclick="deleteMessage('outbox', ${index})">Delete</button>
+                            <button class="resend-button" onclick="resendMessage(${index})">Resend</button>
+                        </div>`;
+                });
+            }
+
+            // Update active link styles
+            updateActiveLink('outbox');
+        }
+
+        // Show Home UI
+        function showHome() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = "<p></p>";
+            const notification = document.getElementById("notification");
+            notification.style.display = "none"; // Hide notification
+            // Clear receiver name and message input fields
+            document.getElementById("receiverName").value = '';
+            document.getElementById("newMessage").value = '';
+            // Reset active link styles
+            resetActiveLinks();
+        }
+
+        // Delete Message
+        function deleteMessage(section, index) {
+            if (section === 'inbox') {
+                inboxMessages.splice(index, 1);
+                showInbox();
+            } else if (section === 'sent') {
+                sentMessages.splice(index, 1);
+                showSent();
+            } else if (section === 'outbox') {
+                outboxMessages.splice(index, 1);
+                showOutbox();
+            }
+        }
+
+        // Resend Message
+        function resendMessage(index) {
+            const msgToResend = outboxMessages[index];
+            const receiverName = msgToResend.to; // Assuming to is defined in the message
+            const timestamp = new Date().toLocaleString();
+
+            // Add message to sent messages
+            sentMessages.push({ to: receiverName, text: msgToResend.text, time: timestamp });
+            console.log("Sent Messages after resend: ", sentMessages);
+
+            // Show message as delivered in inbox (mocking delivery acknowledgment)
+            inboxMessages.push({ from: receiverName, text: msgToResend.text, time: timestamp });
+            console.log("Inbox Messages after resend: ", inboxMessages);
+
+            // Remove from outbox
+            outboxMessages.splice(index, 1);
+            showOutbox();
+
+            // Show notification
+            const notification = document.getElementById("notification");
+            notification.textContent = `Message resent to ${receiverName} at ${timestamp}.`;
+            notification.style.display = "block";
+
+            // Hide notification after 1 second
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 1000);
+        }
+
+        // Update active link styles
+        function updateActiveLink(activeLink) {
+            resetActiveLinks();
+            document.getElementById(activeLink + "Link").classList.add("active-link");
+        }
+
+        // Reset all link styles
+        function resetActiveLinks() {
+            document.querySelectorAll(".message-links a").forEach(link => {
+                link.classList.remove("active-link");
+            });
+        }
+    </script>
+</body>
+</html>

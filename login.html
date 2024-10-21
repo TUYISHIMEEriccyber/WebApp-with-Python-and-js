@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Online TV</title>
+    <style>
+        /* CSS Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #333;
+            color: #fff;
+        }
+
+        header {
+            background-color: #444;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(20, 20, 197, 0.8);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .login-container {
+            background-color: black;
+            border: 5px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(78, 61, 231, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #888;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgb(9, 196, 202);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #777;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #09c4ca;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: #444;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 4px rgba(20, 20, 197, 0.8);
+        }
+
+        #error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Online TV - Login</h1>
+        <nav>
+            <button onclick="goToHome()">Home</button>
+            <button onclick="goToAboutUs()">About</button>
+            <button id="messages-button" onclick="goToSignup()">Signup</button>
+            <button onclick="goToView()">View</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="login-form" onsubmit="return login(event)">
+                <input type="email" id="email" placeholder="Email" required />
+                <input type="password" id="password" placeholder="Password" required />
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="#" onclick="resetPassword()">Forgot Password?</a>
+            </div>
+
+            <p id="error-message"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function goToHome() {
+            window.location.href = "index.html";
+        }
+
+        function goToAboutUs() {
+            window.location.href = "aboutus.html";
+        }
+
+        function goToSignup() {
+            window.location.href = "signup.html";
+        }
+
+        function goToView() {
+            window.location.href = "view.html";
+        }
+
+        async function login(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
+
+            // Hash password before checking it against stored passwords
+            async function hashPassword(password) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(password);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+                return hashHex;
+            }
+
+            // Retrieve user data from local storage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Hash the entered password
+            hashPassword(password).then(hashedPassword => {
+                // Check if the entered credentials match any user in the users array
+                const user = users.find(user => user.email === email && user.password === hashedPassword);
+
+                if (user) {
+                    // Check if the user is an admin or a regular user
+                    if (user.role === 'admin') {
+                        // Redirect to admin page for admins
+                        window.location.href = "admin.html";
+                    } else {
+                        // Redirect to profile page for regular users
+                        window.location.href = "profile.html";
+                    }
+                    // Store the current user's email in localStorage
+                    localStorage.setItem("currentUserEmail", email);
+                } else {
+                    // Show an error message for incorrect credentials
+                    errorMessage.textContent = "Invalid email or password. Please try again.";
+                }
+            });
+        }
+
+        function resetPassword() {
+            const email = prompt("Please enter your email to reset your password:");
+
+            if (email) {
+                // Simulate checking if the email exists in localStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const user = users.find(user => user.email === email);
+
+                if (user) {
+                    alert(`An email has been sent to ${email} with password reset instructions.`);
+                    // Implement sending email functionality here
+                } else {
+                    alert("Email not found. Please check and try again.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

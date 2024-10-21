@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Online TV</title>
+    <style>
+      /* CSS Styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #333;
+        color: #fff;
+      }
+
+      header {
+        background-color: #444;
+        width: 100%;
+        padding: 10px 0;
+        box-shadow: 0 2px 4px rgba(20, 20, 197, 0.8);
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+
+      nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #555;
+        border-radius: 5px;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 20px 20px;
+        width: 100%;
+        flex: 1;
+      }
+
+      .admin-container {
+        background-color: black;
+        border: 5px solid #444;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 800px; /* Increased width */
+        width: 100%;      /* Ensures full width */
+        box-shadow: 0 2px 4px rgba(78, 61, 231, 0.5);
+        text-align: center;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+
+      table th,
+      table td {
+        padding: 10px;
+        border: 1px solid #555;
+        text-align: left;
+        color: white;
+      }
+
+      table th {
+        background-color: #444;
+      }
+
+      table tr:nth-child(even) {
+        background-color: #222;
+      }
+
+      footer {
+        background-color: #444;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 4px rgba(20, 20, 197, 0.8);
+      }
+
+      button {
+        background-color: rgb(9, 196, 202);
+        color: white;
+        border: none;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #777;
+      }
+
+      .delete-button {
+        background-color: red; /* Red background for delete button */
+      }
+
+      .suggestion-container, .announcement-container {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #444;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 800px;
+        text-align: left;
+      }
+
+      .suggestion, .announcement {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #222;
+        border: 1px solid #555;
+        border-radius: 5px;
+      }
+
+      .reply-button {
+        background-color: rgb(9, 196, 202);
+      }
+
+      .reply-list {
+        margin-top: 10px;
+        padding-left: 20px;
+      }
+
+      .reply {
+        margin: 5px 0;
+        padding: 5px;
+        background-color: #444;
+        border: 1px solid #555;
+        border-radius: 3px;
+      }
+
+      .like-button {
+        background-color: green;
+      }
+
+      .total-likes {
+        margin-left: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Online TV - Admin Panel</h1>
+      <nav>
+        <button onclick="goToHome()">Home</button>
+        <button onclick="goToAboutUs()">About</button>
+        <button onclick="logout()" style="background-color: rgb(221, 23, 23);">Logout</button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="admin-container">
+        <h2>Registered Users</h2>
+        <table id="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Password (Hashed)</th>
+              <th>Role</th>
+              <th>Time Registered</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- User rows will be dynamically populated here -->
+          </tbody>
+        </table>
+
+        <div class="suggestion-container">
+          <h3>User Suggestions</h3>
+          <div id="suggestions-list">
+            <!-- Suggestions will be dynamically populated here -->
+          </div>
+        </div>
+
+        <div class="announcement-container">
+          <h3>Make an Announcement</h3>
+          <textarea id="announcement-input" rows="3" placeholder="Type your announcement here..." style="width: 100%;"></textarea>
+          <button onclick="makeAnnouncement()">Announce</button>
+        </div>
+
+        <div class="announcement-container">
+          <h3>Announcements</h3>
+          <div id="announcements-list">
+            <!-- Announcements will be dynamically populated here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const userLikes = {}; // Track user likes for announcements
+
+      function goToHome() {
+        window.location.href = "index.html";
+      }
+
+      function goToAboutUs() {
+        window.location.href = "aboutus.html";
+      }
+
+      function logout() {
+        localStorage.removeItem("currentUserEmail");
+        window.location.href = "login.html";
+      }
+
+      function checkAdminAccess() {
+        const currentUserEmail = localStorage.getItem("currentUserEmail");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const currentUser = users.find(user => user.email === currentUserEmail);
+
+        if (!currentUser || currentUser.role !== 'admin') {
+          alert("Access denied. Admins only.");
+          window.location.href = "login.html"; 
+        }
+      }
+
+      function displayUsers() {
+        const usersTableBody = document.querySelector("#users-table tbody");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        usersTableBody.innerHTML = "";
+        users.forEach((user, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.fullname || "Unknown"}</td>
+            <td>${user.email}</td>
+            <td><span id="password-${index}">${user.password}</span></td>
+            <td>${user.role || "User"}</td>
+            <td>${new Date(user.registrationTime).toLocaleString()}</td>
+            <td>
+              <button onclick="togglePassword(${index}, '${user.password}', '${user.plaintextPassword}', this)">Unhash</button>
+              <button class="delete-button" onclick="deleteUser(${index})">Delete</button>
+            </td>
+          `;
+          usersTableBody.appendChild(row);
+        });
+      }
+
+      function displaySuggestions() {
+        const suggestionsList = document.getElementById("suggestions-list");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        suggestionsList.innerHTML = "";
+        users.forEach(user => {
+          const userSuggestions = JSON.parse(localStorage.getItem(`suggestions_${user.email}`)) || [];
+          userSuggestions.forEach(suggestion => {
+            const suggestionDiv = document.createElement("div");
+            suggestionDiv.className = "suggestion";
+            suggestionDiv.innerHTML = `
+              <strong>User:</strong> ${user.email}<br>
+              <strong>Suggestion:</strong> ${suggestion.text}<br>
+              <button class="delete-button" onclick="deleteSuggestion('${user.email}', '${suggestion.text}', this)">Delete</button>
+              <div class="reply-list"></div>
+            `;
+            suggestionsList.appendChild(suggestionDiv);
+          });
+        });
+      }
+
+      function displayAnnouncements() {
+        const announcementsList = document.getElementById("announcements-list");
+        const announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+        announcementsList.innerHTML = "";
+        announcements.forEach((announcement, index) => {
+          const hasLiked = userLikes[announcement.text] || false; // Check if user has liked
+          announcementDiv = document.createElement("div");
+          announcementDiv.className = "announcement";
+          announcementDiv.innerHTML = `
+            <strong>Announcement:</strong> ${announcement.text}<br>
+            <strong>Date:</strong> ${new Date(announcement.date).toLocaleString()}<br>
+            <button class="like-button" onclick="toggleLike(${index}, '${announcement.text}')">${hasLiked ? 'Unlike' : 'Like'}</button>
+            <span class="total-likes">${announcement.likes || 0} likes</span>
+          `;
+          announcementsList.appendChild(announcementDiv);
+        });
+      }
+
+      function makeAnnouncement() {
+        const announcementInput = document.getElementById("announcement-input");
+        const announcementText = announcementInput.value.trim();
+        if (announcementText === "") {
+          alert("Please enter a valid announcement.");
+          return;
+        }
+        const announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+        announcements.push({ text: announcementText, date: new Date(), likes: 0 });
+        localStorage.setItem("announcements", JSON.stringify(announcements));
+        announcementInput.value = "";
+        displayAnnouncements();
+      }
+
+      function toggleLike(index, announcementText) {
+        const announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+        if (userLikes[announcementText]) {
+          // If the user already liked the announcement, remove the like
+          announcements[index].likes -= 1;
+          userLikes[announcementText] = false;
+        } else {
+          // If the user has not liked the announcement, add the like
+          announcements[index].likes += 1;
+          userLikes[announcementText] = true;
+        }
+        localStorage.setItem("announcements", JSON.stringify(announcements));
+        displayAnnouncements();
+      }
+
+      function togglePassword(index, hashedPassword, plaintextPassword, button) {
+        const passwordField = document.getElementById(`password-${index}`);
+        if (button.textContent === "Unhash") {
+          passwordField.textContent = plaintextPassword || "N/A"; // Display plain text password
+          button.textContent = "Hash"; // Change button to 'Hash'
+        } else {
+          passwordField.textContent = hashedPassword; // Display hashed password
+          button.textContent = "Unhash"; // Change button to 'Unhash'
+        }
+      }
+
+      function deleteUser(index) {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        users.splice(index, 1); // Remove user at specified index
+        localStorage.setItem("users", JSON.stringify(users)); // Update local storage
+        displayUsers(); // Refresh user list
+      }
+
+      function deleteSuggestion(userEmail, suggestionText, button) {
+        const suggestions = JSON.parse(localStorage.getItem(`suggestions_${userEmail}`)) || [];
+        const updatedSuggestions = suggestions.filter(suggestion => suggestion.text !== suggestionText); // Filter out deleted suggestion
+        localStorage.setItem(`suggestions_${userEmail}`, JSON.stringify(updatedSuggestions)); // Update local storage
+        button.parentElement.remove(); // Remove the suggestion from the UI
+      }
+
+      // Initial loading of data
+      checkAdminAccess();
+      displayUsers();
+      displaySuggestions();
+      displayAnnouncements();
+    </script>
+  </body>
+</html>

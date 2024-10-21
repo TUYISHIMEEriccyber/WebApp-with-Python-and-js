@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View - Online TV</title>
+    <style>
+      /* CSS Styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #333;
+        color: #fff;
+        background-image: url('tv-background-view.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        animation: fadeIn 1s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      header {
+        background-color: #222;
+        width: 100%;
+        padding: 15px 20px;
+        box-shadow: 0 2px 4px rgba(20, 20, 197, 0.8);
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideInDown 0.5s ease-in-out;
+      }
+
+      @keyframes slideInDown {
+        from {
+          transform: translateY(-100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #fff;
+        text-shadow: 1px 1px 5px #09c4ca;
+      }
+
+      nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(9, 196, 202);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0a7c7e;
+        transform: scale(1.05);
+      }
+
+      button.active {
+        background-color: #0a4a4b;
+        border: 2px solid #09c4ca;
+        color: #fff;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 20px 20px;
+        width: 100%;
+        flex: 1;
+      }
+
+      .view-container {
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 5px solid #444;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 800px;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(35, 148, 60, 0.5);
+        animation: scaleIn 0.8s ease-in;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #09c4ca;
+        text-shadow: 1px 1px 5px #000;
+      }
+
+      .channel {
+        background-color: #222;
+        border: 1px solid #555;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .channel:hover {
+        background-color: #444;
+        transform: translateY(-5px);
+      }
+
+      footer {
+        background-color: #222;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 4px rgba(20, 20, 197, 0.8);
+        color: #ddd;
+      }
+
+      @media (max-width: 600px) {
+        .view-container {
+          padding: 10px;
+          font-size: 14px;
+        }
+
+        .channel {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+
+        button {
+          padding: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Online TV - View Channels</h1>
+      <nav>
+        <button onclick="goToHome()">Home</button>
+        <button onclick="goToAboutUs()">About</button>
+        <button id="messages-button" onclick="goToLogin()">Login</button>
+        <button onclick="goToSignup()">Signup</button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="view-container">
+        <h2>Available Channels</h2>
+
+        <div class="channel">
+          <span>Channel 1: News</span>
+          <button>Watch</button>
+        </div>
+        <div class="channel">
+          <span>Channel 2: Movies</span>
+          <button>Watch</button>
+        </div>
+        <div class="channel">
+          <span>Channel 3: Sports</span>
+          <button>Watch</button>
+        </div>
+        <div class="channel">
+          <span>Channel 4: Music</span>
+          <button>Watch</button>
+        </div>
+        <div class="channel">
+          <span>Channel 5: Documentaries</span>
+          <button>Watch</button>
+        </div>
+        <!-- Add more channels as needed -->
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Online TV. All rights reserved.</p>
+    </footer>
+
+    <script>
+      function goToHome() {
+        window.location.href = "index.html";
+      }
+
+      function goToAboutUs() {
+        window.location.href = "aboutus.html";
+      }
+
+      function goToLogin() {
+        window.location.href = "login.html";
+      }
+
+      function goToSignup() {
+        window.location.href = "sigup.html"; // Corrected typo here
+      }
+    </script>
+  </body>
+</html>
